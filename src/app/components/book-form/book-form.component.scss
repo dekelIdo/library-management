@@ -1,25 +1,56 @@
 .book-form-container {
-  max-width: 600px;
+  max-width: 700px;
   margin: 0 auto;
   position: relative;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 0;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  
+  mat-card {
+    border-radius: 0;
+    overflow: hidden;
+    box-shadow: none;
+    background: transparent;
+  }
 }
 
 .close-button {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  z-index: 1;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  font-size: 24px;
+  color: white;
+  cursor: pointer;
+  padding: 8px;
+  line-height: 1;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+  }
 }
 
 .book-form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 24px;
+  padding: 8px;
 }
 
 .form-row {
   display: flex;
-  gap: 16px;
+  gap: 20px;
   align-items: flex-start;
 }
 
@@ -31,24 +62,42 @@
   flex: 1;
 }
 
-// Material Design overrides
-mat-card-header {
-  position: relative;
-  padding-bottom: 16px;
-  border-bottom: 1px solid #e0e0e0;
-}
-
-mat-card-title {
+.form-header {
   display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 24px 24px 20px 24px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  margin: 0;
+  border-radius: 0;
+  overflow: hidden;
+  min-height: 60px;
   align-items: center;
-  gap: 8px;
-  font-size: 20px;
-  font-weight: 500;
-  color: #333;
+  h2 {
+    margin: 0;
+    color: white;
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: 1.3;
+    flex: 1;
+    padding-right: 16px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    mat-icon {
+      font-size: 1.5rem;
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+  }
 }
 
 mat-card-content {
-  padding: 24px 24px 0 24px;
+  padding: 20px 24px 0 24px;
+  margin: 0;
 }
 
 mat-card-actions {
@@ -81,11 +130,13 @@ button[mat-raised-button] {
   font-weight: 500;
   text-transform: none;
   letter-spacing: 0.5px;
+  border-radius: 0;
 }
 
 button[mat-button] {
   font-weight: 500;
   text-transform: none;
+  border-radius: 0;
 }
 
 // Image upload styles
@@ -106,30 +157,134 @@ button[mat-button] {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  gap: 16px;
+}
+
+.image-preview-container {
+  display: flex;
+  flex-direction: column;
   gap: 12px;
 }
 
 .image-preview {
   position: relative;
   display: inline-block;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: scale(1.02);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  }
 }
 
 .preview-image {
   width: 120px;
   height: 160px;
   object-fit: cover;
-  border-radius: 8px;
-  border: 2px solid #e0e0e0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 0;
+  display: block;
+}
+
+.image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+
+  .image-preview:hover & {
+    opacity: 1;
+  }
 }
 
 .remove-image-btn {
-  position: absolute;
-  top: -8px;
-  right: -8px;
-  background: white;
+  background: rgba(244, 67, 54, 0.9);
+  color: white;
   border-radius: 50%;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba(244, 67, 54, 1);
+    transform: scale(1.1);
+  }
+}
+
+.image-status {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: white;
+  font-size: 12px;
+  font-weight: 500;
+  background: rgba(76, 175, 80, 0.9);
+  padding: 4px 8px;
+  border-radius: 12px;
+
+  mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.no-image-preview {
+  position: relative;
+  display: inline-block;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 2px dashed #ccc;
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: #1976d2;
+    box-shadow: 0 4px 12px rgba(25, 118, 210, 0.2);
+  }
+}
+
+.default-image {
+  width: 120px;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 0;
+  display: block;
+  opacity: 0.3;
+  filter: grayscale(100%);
+}
+
+.no-image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  color: #666;
+  font-size: 12px;
+  font-weight: 500;
+
+  mat-icon {
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+    color: #999;
+  }
 }
 
 .upload-button {
@@ -137,14 +292,26 @@ button[mat-button] {
   align-items: center;
   gap: 8px;
   padding: 12px 16px;
-  border: 2px dashed #ccc;
-  border-radius: 8px;
+  border: 2px solid #e0e0e0;
+  border-radius: 0;
   background: #fafafa;
   transition: all 0.2s ease;
+  font-weight: 500;
   
   &:hover {
     border-color: #1976d2;
     background: #f5f5f5;
+    transform: translateY(-1px);
+  }
+
+  &.has-image {
+    background: #e3f2fd;
+    border-color: #1976d2;
+    color: #1976d2;
+
+    &:hover {
+      background: #bbdefb;
+    }
   }
 }
 
@@ -157,31 +324,53 @@ mat-hint {
 
 // Responsive design
 @media (max-width: 768px) {
+  .book-form-container {
+    margin: 16px;
+    max-width: calc(100vw - 32px);
+  }
+
   .form-row {
     flex-direction: column;
-    gap: 0;
+    gap: 16px;
   }
   
   .half-width {
     width: 100%;
   }
   
+  .form-header {
+    padding: 20px 20px 16px 20px;
+
+    h2 {
+      font-size: 1.5rem;
+    }
+  }
+
   mat-card-content {
-    padding: 16px 16px 0 16px;
+    padding: 20px 20px 0 20px;
   }
   
   mat-card-actions {
-    padding: 16px;
+    padding: 20px;
     flex-direction: column;
+    gap: 12px;
     
     button {
       width: 100%;
+      height: 48px;
     }
   }
   
   .preview-image {
-    width: 100px;
-    height: 133px;
+    width: 120px;
+    height: 160px;
+  }
+
+  .close-button {
+    width: 36px;
+    height: 36px;
+    font-size: 20px;
+    flex-shrink: 0;
   }
 }
 
@@ -190,12 +379,12 @@ mat-hint {
     margin: 8px;
   }
   
-  mat-card-header {
+  .form-header {
     padding: 16px 16px 12px 16px;
-  }
-  
-  mat-card-title {
-    font-size: 18px;
+
+    h2 {
+      font-size: 1.25rem;
+    }
   }
   
   .preview-image {

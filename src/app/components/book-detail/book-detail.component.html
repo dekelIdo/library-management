@@ -13,9 +13,9 @@
 
   <div class="detail-content">
     <div class="book-info">
-      <div class="book-header" *ngIf="book.coverImage">
+      <div class="book-header">
         <div class="book-cover-large">
-          <img [src]="book.coverImage" [alt]="book.title + ' cover'" class="cover-image">
+          <img [src]="getBookImage(book)" [alt]="book.title + ' cover'" class="cover-image">
         </div>
       </div>
 
@@ -39,13 +39,6 @@
         <span class="info-value">{{ book.category }}</span>
       </div>
 
-      <div class="info-row" *ngIf="book.status">
-        <span class="info-label">Reading Status:</span>
-        <span class="info-value status-value">
-          <mat-icon class="status-icon">{{ getStatusIcon(book.status) }}</mat-icon>
-          {{ book.status }}
-        </span>
-      </div>
 
       <div class="info-row" *ngIf="book.description">
         <span class="info-label">Description:</span>

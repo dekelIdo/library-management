@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 
 import { Book } from '../../models/book.model';
+import { BookService } from '../../services/book.service';
 
 @Component({
   selector: 'app-book-detail',
@@ -17,6 +18,8 @@ export class BookDetailComponent {
   @Output() close = new EventEmitter<void>();
   @Output() edit = new EventEmitter<Book>();
 
+  constructor(private bookService: BookService) {}
+
   onClose(): void {
     this.close.emit();
   }
@@ -27,12 +30,8 @@ export class BookDetailComponent {
     }
   }
 
-  getStatusIcon(status: string): string {
-    const iconMap: { [key: string]: string } = {
-      'Want to Read': 'bookmark_border',
-      'Currently Reading': 'auto_stories',
-      'Read': 'check_circle'
-    };
-    return iconMap[status] || 'book';
+  getBookImage(book: Book): string {
+    return this.bookService.getBookImage(book);
   }
+
 }

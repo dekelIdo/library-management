@@ -1,19 +1,18 @@
 <mat-card class="book-form-container">
-  <mat-card-header>
-    <mat-card-title>
+  <div class="form-header">
+    <h2>
       <mat-icon>{{ isEditMode ? 'edit' : 'add' }}</mat-icon>
       {{ isEditMode ? 'Edit Book' : 'Add New Book' }}
-    </mat-card-title>
+    </h2>
     <button 
-      mat-icon-button 
       class="close-button" 
       (click)="onCancel()"
       type="button"
       aria-label="Close form"
     >
-      <mat-icon>close</mat-icon>
+      ×
     </button>
-  </mat-card-header>
+  </div>
 
   <mat-card-content>
     <form [formGroup]="bookForm" (ngSubmit)="onSubmit()" class="book-form">
@@ -113,17 +112,6 @@
         </mat-form-field>
       </div>
 
-      <div class="form-row">
-        <mat-form-field appearance="outline" class="half-width">
-          <mat-label>Reading Status</mat-label>
-          <mat-select formControlName="status">
-            <mat-option value="">Select status (optional)</mat-option>
-            <mat-option *ngFor="let status of readingStatuses" [value]="status">
-              {{ status }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
 
       <div class="form-row">
         <div class="image-upload-section">
@@ -137,29 +125,45 @@
               style="display: none"
             />
             
-            <div *ngIf="coverImagePreview" class="image-preview">
-              <img [src]="coverImagePreview" alt="Book cover preview" class="preview-image">
-              <button 
-                mat-icon-button 
-                color="warn" 
-                (click)="removeImage()"
-                class="remove-image-btn"
-                type="button"
-                title="Remove image"
-              >
-                <mat-icon>close</mat-icon>
-              </button>
+            <div class="image-preview-container">
+              <div *ngIf="coverImagePreview" class="image-preview">
+                <img [src]="coverImagePreview" alt="Book cover preview" class="preview-image">
+                <div class="image-overlay">
+                  <button 
+                    mat-icon-button 
+                    color="warn" 
+                    (click)="removeImage()"
+                    class="remove-image-btn"
+                    type="button"
+                    title="Remove image"
+                  >
+                    <mat-icon>close</mat-icon>
+                  </button>
+                  <div class="image-status">
+                    <mat-icon>check_circle</mat-icon>
+                    <span>Image selected</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div *ngIf="!coverImagePreview" class="no-image-preview">
+                <img [src]="getDefaultBookImage()" alt="Default book cover" class="default-image">
+                <div class="no-image-overlay">
+                  <mat-icon>add_photo_alternate</mat-icon>
+                  <span>No image selected</span>
+                </div>
+              </div>
             </div>
             
             <button 
-              *ngIf="!coverImagePreview"
               mat-stroked-button 
               type="button"
               (click)="fileInput.click()"
               class="upload-button"
+              [class.has-image]="coverImagePreview"
             >
-              <mat-icon>add_photo_alternate</mat-icon>
-              Upload Cover Image
+              <mat-icon>{{ coverImagePreview ? 'edit' : 'add_photo_alternate' }}</mat-icon>
+              {{ coverImagePreview ? 'Change Image' : 'Upload Cover Image' }}
             </button>
           </div>
         </div>

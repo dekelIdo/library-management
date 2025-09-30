@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
+import { AbstractControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { catchError, tap } from 'rxjs/operators';
 import { Book } from '../models/book.model';
 
@@ -8,7 +9,8 @@ import { Book } from '../models/book.model';
 })
 export class BookService {
   private readonly STORAGE_KEY = 'library_books';
-  private readonly API_BASE_URL = 'https://api.example.com/books'; // Future API endpoint
+  private readonly API_BASE_URL = 'https://api.example.com/books';
+  private readonly DEFAULT_BOOK_IMAGE = 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=600&fit=crop&crop=center';
   private booksSubject = new BehaviorSubject<Book[]>([]);
   private loadingSubject = new BehaviorSubject<boolean>(false);
   
@@ -24,7 +26,6 @@ export class BookService {
     
     this.loadBooksFromJson().subscribe({
       next: (initialBooks) => {
-        // Then check if there are user-added books in localStorage
         const storedBooks = localStorage.getItem(this.STORAGE_KEY);
         let userAddedBooks: Book[] = [];
         
@@ -39,7 +40,6 @@ export class BookService {
           }
         }
         
-        // Merge user-added books first, then initial books
         const allBooks = [...userAddedBooks, ...initialBooks];
         this.booksSubject.next(allBooks);
         this.saveBooks(allBooks);
@@ -65,7 +65,6 @@ export class BookService {
   }
 
   private loadBooksFromJson(): Observable<Book[]> {
-    // This method will be replaced with API call in the future
     return new Observable(observer => {
       fetch('/assets/books.json')
         .then(response => {
@@ -80,7 +79,6 @@ export class BookService {
         })
         .catch(error => {
           console.error('Error loading books from JSON:', error);
-          // Fallback to embedded initial books if JSON fails
           const fallbackBooks = this.getInitialBooks();
           observer.next(fallbackBooks);
           observer.complete();
@@ -89,7 +87,6 @@ export class BookService {
   }
 
   private getInitialBooks(): Book[] {
-    // Fallback initial books if JSON file cannot be loaded
     return [
       {
         id: "1",
@@ -166,9 +163,7 @@ export class BookService {
     ];
   }
 
-  // Future API integration method
   private loadBooksFromApi(): Observable<Book[]> {
-    // This will be implemented when switching to real API
     return of([]).pipe(
       catchError(error => {
         console.error('API call failed, falling back to JSON:', error);
@@ -187,7 +182,6 @@ export class BookService {
       ...bookData,
       id: this.generateId()
     };
-    // Add new book at the beginning of the list (top of gallery)
     const updatedBooks = [newBook, ...currentBooks];
     this.booksSubject.next(updatedBooks);
     this.saveBooks(updatedBooks);
@@ -213,6 +207,97 @@ export class BookService {
     return this.booksSubject.value.find(book => book.id === id);
   }
 
+  // Returns a safe image URL for a book, falling back to the default image
+  getBookImage(book: Book): string {
+    return (book && (book as any).coverImage) ? (book as any).coverImage : this.DEFAULT_BOOK_IMAGE;
+  }
+
+  // Expose the default image for consumers like forms/placeholders
+  getDefaultBookImage(): string {
+    return this.DEFAULT_BOOK_IMAGE;
+  }
+
+  // ============ Form helpers (validators and utilities) ============
+  yearValidator(): ValidatorFn {
+    return (control: AbstractControl) => {
+      if (!control.value) {
+        return null;
+      }
+      const year: string = control.value;
+      const yearRegex = /^\d{4}$/;
+      if (!yearRegex.test(year)) {
+        return { invalidYear: true };
+      }
+      const yearNum = parseInt(year, 10);
+      const currentYear = new Date().getFullYear();
+      if (yearNum < 1000 || yearNum > currentYear) {
+        return { invalidYearRange: true };
+      }
+      return null;
+    };
+  }
+
+  isbnValidator(): ValidatorFn {
+    return (control: AbstractControl) => {
+      if (!control.value) {
+        return null;
+      }
+      const isbn: string = control.value;
+      const isbnRegex = /^[\d-]{10,17}$/;
+      if (!isbnRegex.test(isbn)) {
+        return { invalidIsbn: true };
+      }
+      return null;
+    };
+  }
+
+  markFormGroupTouched(form: FormGroup): void {
+    Object.keys(form.controls).forEach(key => {
+      const control = form.get(key);
+      control?.markAsTouched();
+    });
+  }
+
+  // Form reset and population helpers
+  resetForm(form: FormGroup, predefinedCategories: string[]): void {
+    form.reset();
+    // Reset custom category validators
+    form.get('customCategory')?.clearValidators();
+    form.get('customCategory')?.updateValueAndValidity();
+  }
+
+  resetFormToDefault(form: FormGroup, predefinedCategories: string[]): void {
+    this.resetForm(form, predefinedCategories);
+    form.patchValue({
+      category: ''
+    });
+  }
+
+  populateForm(form: FormGroup, book: Book, predefinedCategories: string[]): void {
+    if (book) {
+      const category = book.category || '';
+      const isCustomCategory = category && !predefinedCategories.includes(category);
+      
+      form.patchValue({
+        title: book.title,
+        author: book.author,
+        year: book.year || '',
+        isbn: book.isbn || '',
+        description: book.description || '',
+        category: isCustomCategory ? 'Other' : category,
+        customCategory: isCustomCategory ? category : '',
+        coverImage: book.coverImage || ''
+      });
+      
+      if (isCustomCategory) {
+        form.get('customCategory')?.setValidators([Validators.required]);
+      } else {
+        form.get('customCategory')?.clearValidators();
+      }
+      form.get('customCategory')?.updateValueAndValidity();
+    }
+  }
+
   searchBooks(query: string): Observable<Book[]> {
     return new Observable(observer => {
       this.books$.subscribe(books => {
@@ -232,7 +317,6 @@ export class BookService {
     return Date.now().toString(36) + Math.random().toString(36).substr(2);
   }
 
-  // Method to reset data and reload from JSON (useful for testing)
   resetToInitialData(): void {
     localStorage.removeItem(this.STORAGE_KEY);
     this.loadBooks();

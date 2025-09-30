@@ -44,7 +44,7 @@ import { NotificationComponent } from '../notification/notification.component';
   ],
   templateUrl: './book-list.component.html',
   styleUrls: ['./book-list.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.Default
 })
 export class BookListComponent implements OnInit {
   books$: Observable<Book[]>;
@@ -93,8 +93,7 @@ export class BookListComponent implements OnInit {
           filteredBooks = filteredBooks.filter(book => 
             book.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
             book.author.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            (book.category && book.category.toLowerCase().includes(searchQuery.toLowerCase())) ||
-            (book.status && book.status.toLowerCase().includes(searchQuery.toLowerCase()))
+            (book.category && book.category.toLowerCase().includes(searchQuery.toLowerCase()))
           );
         }
         
@@ -113,6 +112,7 @@ export class BookListComponent implements OnInit {
         const startIndex = pagination.pageIndex * pagination.pageSize;
         const endIndex = startIndex + pagination.pageSize;
         this.paginatedBooks = sortedBooks.slice(startIndex, endIndex);
+        
         
         return this.paginatedBooks;
       })
@@ -240,23 +240,10 @@ export class BookListComponent implements OnInit {
     return colorMap[category] || 'primary';
   }
 
-  getStatusColor(status: string): string {
-    const colorMap: { [key: string]: string } = {
-      'Want to Read': 'accent',
-      'Currently Reading': 'primary',
-      'Read': 'warn'
-    };
-    return colorMap[status] || 'primary';
+  getBookImage(book: Book): string {
+    return this.bookService.getBookImage(book);
   }
 
-  getStatusIcon(status: string): string {
-    const iconMap: { [key: string]: string } = {
-      'Want to Read': 'bookmark_border',
-      'Currently Reading': 'auto_stories',
-      'Read': 'check_circle'
-    };
-    return iconMap[status] || 'book';
-  }
 
   private sortBooks(books: Book[], sortBy: string): Book[] {
     return [...books].sort((a, b) => {
@@ -275,8 +262,6 @@ export class BookListComponent implements OnInit {
           return (parseInt(b.year || '0') - parseInt(a.year || '0'));
         case 'category':
           return (a.category || '').localeCompare(b.category || '');
-        case 'status':
-          return (a.status || '').localeCompare(b.status || '');
         default:
           return 0;
       }

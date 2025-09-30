@@ -6,8 +6,7 @@ export interface Book {
   readonly isbn?: string;
   readonly description?: string;
   readonly category?: string;
-  readonly coverImage?: string; // Base64 encoded image
-  readonly status?: 'Want to Read' | 'Currently Reading' | 'Read';
+  readonly coverImage?: string;
 }
 
 export interface BookFormData {
@@ -18,5 +17,4 @@ export interface BookFormData {
   description: string;
   category: string;
   coverImage?: string;
-  status?: string;
 }

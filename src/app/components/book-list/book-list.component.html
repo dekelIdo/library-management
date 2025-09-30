@@ -29,7 +29,7 @@
         <input 
           matInput
           (input)="onSearchChange($event)"
-          placeholder="Search by title, author, category, or status..."
+          placeholder="Search by title, author, or category..."
         />
         <mat-icon matSuffix>search</mat-icon>
       </mat-form-field>
@@ -44,7 +44,6 @@
           <mat-option value="year">Year (Oldest First)</mat-option>
           <mat-option value="year-desc">Year (Newest First)</mat-option>
           <mat-option value="category">Category</mat-option>
-          <mat-option value="status">Reading Status</mat-option>
         </mat-select>
       </mat-form-field>
 
@@ -85,9 +84,8 @@
       class="book-card"
     >
       <img 
-        *ngIf="book.coverImage" 
         mat-card-image 
-        [src]="book.coverImage" 
+        [src]="getBookImage(book)" 
         [alt]="book.title + ' cover'"
         class="book-cover-image"
       >
@@ -113,12 +111,6 @@
             </mat-chip>
           </mat-chip-set>
 
-          <mat-chip-set *ngIf="book.status" class="book-status">
-            <mat-chip [color]="getStatusColor(book.status)" selected>
-              <mat-icon matChipAvatar>{{ getStatusIcon(book.status) }}</mat-icon>
-              {{ book.status }}
-            </mat-chip>
-          </mat-chip-set>
         </div>
 
         <p *ngIf="book.description" class="book-description">

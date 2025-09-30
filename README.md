@@ -11,12 +11,6 @@ A simple Angular application for managing a personal book library with full CRUD
 - **Data Persistence**: Changes are saved to localStorage
 - **Modern UI**: Clean, intuitive interface with modal dialogs
 
-## Prerequisites
-
-- Node.js (version 14 or higher)
-- npm (comes with Node.js)
-- Angular CLI (will be installed automatically)
-
 ## Installation & Running
 
 1. **Install dependencies:**
@@ -59,6 +53,7 @@ src/
 - **State Management**: Simple service-based state with BehaviorSubject
 - **Data Persistence**: localStorage for client-side persistence
 - **Change Detection**: OnPush strategy for performance
+- **Helping AI tools**: Curser ai
 
 ## Validation Rules
 
@@ -72,14 +67,7 @@ src/
 
 - **Backend Integration**: Replace localStorage with REST API
 - **Authentication**: User login and book ownership
-- **Pagination**: Handle large book collections
-- **Advanced Search**: Filter by author, category, year range
-- **Image Support**: Book cover uploads and display
-- **Export/Import**: CSV/JSON data exchange
 - **Unit Tests**: Comprehensive test coverage
-- **Error Handling**: Global error management
-- **Caching**: Optimize API calls and data loading
-- **Accessibility**: ARIA labels and keyboard navigation
 
 ## Development Notes
 
@@ -89,5 +77,3 @@ This application was built following Angular best practices with a focus on:
 - Responsive design principles
 - Form validation and user experience
 - Performance optimization with OnPush change detection
-
-The codebase includes TODO comments where additional production features would be implemented.
