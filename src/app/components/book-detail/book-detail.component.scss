@@ -6,7 +6,8 @@
   overflow: hidden;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  
+  min-width: 600px;
+
   mat-card {
     border-radius: 0;
     overflow: hidden;
@@ -66,7 +67,7 @@
 .detail-content {
   padding: 24px;
   margin: 0;
-  background: linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(250,250,252,0.95) 100%);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(250, 250, 252, 0.95) 100%);
 }
 
 .book-info {
@@ -105,7 +106,7 @@
   padding: 10px 12px;
   background: #fff;
   border: 1px solid #eee;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
 }
 
 .info-label {
@@ -128,12 +129,12 @@
   flex: 1;
   font-size: 14px;
   line-height: 1.6;
-  
+
   &.description-text {
     white-space: pre-wrap;
     padding-top: 2px;
   }
-  
+
   &.status-value {
     display: flex;
     align-items: center;
@@ -153,7 +154,7 @@
   justify-content: flex-end;
   padding-top: 20px;
   border-top: 1px solid #e9e9ef;
-  background: linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0));
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0));
 }
 
 .action-button {
@@ -197,6 +198,14 @@
     h2 {
       font-size: 1.5rem;
     }
+  }
+
+  .book-detail-container {
+    min-width: unset;
+  }
+
+  .cover-image {
+    width: 250px;
   }
 
   .detail-content {
