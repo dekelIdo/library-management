@@ -21,7 +21,6 @@ export class NotificationComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    // Component initialization handled by observables
   }
 
   ngOnDestroy(): void {

@@ -217,6 +217,89 @@ export class BookService {
     return this.DEFAULT_BOOK_IMAGE;
   }
 
+  sortBooks(books: Book[], sortBy: string): Book[] {
+    return [...books].sort((a, b) => {
+      switch (sortBy) {
+        case 'title':
+          return (a.title || '').localeCompare(b.title || '');
+        case 'title-desc':
+          return (b.title || '').localeCompare(a.title || '');
+        case 'author':
+          return (a.author || '').localeCompare(b.author || '');
+        case 'author-desc':
+          return (b.author || '').localeCompare(a.author || '');
+        case 'year':
+          return (parseInt(a.year || '0', 10) - parseInt(b.year || '0', 10));
+        case 'year-desc':
+          return (parseInt(b.year || '0', 10) - parseInt(a.year || '0', 10));
+        case 'category':
+          return (a.category || '').localeCompare(b.category || '');
+        default:
+          return 0;
+      }
+    });
+  }
+
+  computeSortKey(active: string, direction: 'asc' | 'desc' | '', defaultKey: string = 'title'): string {
+    if (!direction) {
+      return defaultKey;
+    }
+    return direction === 'desc' ? `${active}-desc` : active;
+  }
+
+  paginate<T>(items: T[], pageIndex: number, pageSize: number): T[] {
+    const startIndex = pageIndex * pageSize;
+    const endIndex = startIndex + pageSize;
+    return items.slice(startIndex, endIndex);
+  }
+
+  // ================= Filtering =================
+  filterBooks(
+    books: Book[],
+    opts: {
+      searchQuery?: string;
+      category?: string;
+      year?: string | number | null;
+      isbn?: string | null;
+    }
+  ): Book[] {
+    const search = (opts.searchQuery || '').trim().toLowerCase();
+    const category = (opts.category || '').trim();
+    const yearStr = (opts.year ?? '').toString().trim();
+    const isbn = (opts.isbn || '').trim().toLowerCase();
+
+    return books.filter((book) => {
+      // Free text search across title, author, category
+      const matchesSearch = !search || (
+        (book.title || '').toLowerCase().includes(search) ||
+        (book.author || '').toLowerCase().includes(search) ||
+        (book.category || '').toLowerCase().includes(search)
+      );
+
+      // Exact category filter
+      const matchesCategory = !category || (book.category === category);
+
+      // Year filter supports 4-digit or partial (prefix) match to be lenient
+      const matchesYear = !yearStr || (book.year || '').startsWith(yearStr);
+
+      // ISBN filter case-insensitive, substring match for flexibility
+      const matchesIsbn = !isbn || (book.isbn || '').toLowerCase().includes(isbn);
+
+      return matchesSearch && matchesCategory && matchesYear && matchesIsbn;
+    });
+  }
+
+  getCategoryColor(category: string): string {
+    const colorMap: { [key: string]: string } = {
+      'Fiction': 'primary',
+      'Science': 'accent',
+      'History': 'warn',
+      'Biography': 'primary',
+      'Other': 'accent'
+    };
+    return colorMap[category] || 'primary';
+  }
+
   // ============ Form helpers (validators and utilities) ============
   yearValidator(): ValidatorFn {
     return (control: AbstractControl) => {

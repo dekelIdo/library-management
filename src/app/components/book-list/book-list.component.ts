@@ -44,7 +44,7 @@ import { NotificationComponent } from '../notification/notification.component';
   ],
   templateUrl: './book-list.component.html',
   styleUrls: ['./book-list.component.scss'],
-  changeDetection: ChangeDetectionStrategy.Default
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BookListComponent implements OnInit {
   books$: Observable<Book[]>;
@@ -53,6 +53,8 @@ export class BookListComponent implements OnInit {
   searchQuery$ = new BehaviorSubject<string>('');
   sortQuery$ = new BehaviorSubject<string>('title');
   categoryFilter$ = new BehaviorSubject<string>('');
+  yearFilter$ = new BehaviorSubject<string>('');
+  isbnFilter$ = new BehaviorSubject<string>('');
   showAddForm = false;
   selectedBook: Book | null = null;
   
@@ -67,66 +69,39 @@ export class BookListComponent implements OnInit {
   totalBooks = 0;
   paginatedBooks: Book[] = [];
   private paginationSubject!: BehaviorSubject<{ pageIndex: number; pageSize: number }>;
-  
-  // Make Math available in template
   Math = Math;
 
   constructor(private bookService: BookService) {
     this.loading$ = this.bookService.loading$;
-    
-    // Create a subject for pagination changes
     const paginationSubject = new BehaviorSubject({ pageIndex: 0, pageSize: 6 });
-    
-    // Combine books, search, sort, filter, and pagination queries
     this.books$ = combineLatest([
       this.bookService.books$,
       this.searchQuery$.pipe(startWith('')),
       this.sortQuery$.pipe(startWith('title')),
       this.categoryFilter$.pipe(startWith('')),
+      this.yearFilter$.pipe(startWith('')),
+      this.isbnFilter$.pipe(startWith('')),
       paginationSubject
     ]).pipe(
-      map(([books, searchQuery, sortQuery, categoryFilter, pagination]) => {
-        let filteredBooks = books;
-        
-        // Apply search filter
-        if (searchQuery.trim()) {
-          filteredBooks = filteredBooks.filter(book => 
-            book.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            book.author.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            (book.category && book.category.toLowerCase().includes(searchQuery.toLowerCase()))
-          );
-        }
-        
-        // Apply category filter
-        if (categoryFilter) {
-          filteredBooks = filteredBooks.filter(book => book.category === categoryFilter);
-        }
-        
-        // Apply sorting
-        const sortedBooks = this.sortBooks(filteredBooks, sortQuery);
-        
-        // Update total books count
+      map(([books, searchQuery, sortQuery, categoryFilter, yearFilter, isbnFilter, pagination]) => {
+        const filteredBooks = this.bookService.filterBooks(books, {
+          searchQuery,
+          category: categoryFilter,
+          year: yearFilter,
+          isbn: isbnFilter
+        });
+        const sortedBooks = this.bookService.sortBooks(filteredBooks, sortQuery);
         this.totalBooks = sortedBooks.length;
-        
-        // Apply pagination
-        const startIndex = pagination.pageIndex * pagination.pageSize;
-        const endIndex = startIndex + pagination.pageSize;
-        this.paginatedBooks = sortedBooks.slice(startIndex, endIndex);
-        
-        
+        this.paginatedBooks = this.bookService.paginate(sortedBooks, pagination.pageIndex, pagination.pageSize);
         return this.paginatedBooks;
       })
     );
     
-    // Create paginated books observable
     this.paginatedBooks$ = this.books$;
-    
-    // Store pagination subject for later use
     this.paginationSubject = paginationSubject;
   }
 
   ngOnInit(): void {
-    // Load available categories for filter dropdown
     this.bookService.books$.subscribe(books => {
       const categories = [...new Set(books.map(book => book.category).filter(Boolean))] as string[];
       this.availableCategories = categories.sort();
@@ -151,6 +126,18 @@ export class BookListComponent implements OnInit {
     this.resetPagination();
   }
 
+  onYearFilterChange(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    this.yearFilter$.next(target.value);
+    this.resetPagination();
+  }
+
+  onIsbnFilterChange(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    this.isbnFilter$.next(target.value);
+    this.resetPagination();
+  }
+
   onPageChange(event: PageEvent): void {
     this.currentPage = event.pageIndex;
     this.pageSize = event.pageSize;
@@ -160,13 +147,7 @@ export class BookListComponent implements OnInit {
   onSortChange(event: Sort): void {
     const sortField = event.active;
     const sortDirection = event.direction;
-    
-    if (sortDirection === '') {
-      this.currentSort = 'title';
-    } else {
-      this.currentSort = sortDirection === 'desc' ? `${sortField}-desc` : sortField;
-    }
-    
+    this.currentSort = this.bookService.computeSortKey(sortField, sortDirection, 'title');
     this.sortQuery$.next(this.currentSort);
     this.resetPagination();
   }
@@ -177,10 +158,11 @@ export class BookListComponent implements OnInit {
   }
 
   onResetFilters(): void {
-    // Reset all filters and search
     this.searchQuery$.next('');
     this.sortQuery$.next('title');
     this.categoryFilter$.next('');
+    this.yearFilter$.next('');
+    this.isbnFilter$.next('');
     this.currentSort = 'title';
     this.currentCategoryFilter = '';
     this.resetPagination();
@@ -190,6 +172,8 @@ export class BookListComponent implements OnInit {
     return !!(
       this.searchQuery$.value.trim() || 
       this.currentCategoryFilter || 
+      this.yearFilter$.value.trim() ||
+      this.isbnFilter$.value.trim() ||
       this.currentSort !== 'title'
     );
   }
@@ -230,42 +214,10 @@ export class BookListComponent implements OnInit {
   }
 
   getCategoryColor(category: string): string {
-    const colorMap: { [key: string]: string } = {
-      'Fiction': 'primary',
-      'Science': 'accent',
-      'History': 'warn',
-      'Biography': 'primary',
-      'Other': 'accent'
-    };
-    return colorMap[category] || 'primary';
+    return this.bookService.getCategoryColor(category);
   }
 
   getBookImage(book: Book): string {
     return this.bookService.getBookImage(book);
   }
-
-
-  private sortBooks(books: Book[], sortBy: string): Book[] {
-    return [...books].sort((a, b) => {
-      switch (sortBy) {
-        case 'title':
-          return a.title.localeCompare(b.title);
-        case 'title-desc':
-          return b.title.localeCompare(a.title);
-        case 'author':
-          return a.author.localeCompare(b.author);
-        case 'author-desc':
-          return b.author.localeCompare(a.author);
-        case 'year':
-          return (parseInt(a.year || '0') - parseInt(b.year || '0'));
-        case 'year-desc':
-          return (parseInt(b.year || '0') - parseInt(a.year || '0'));
-        case 'category':
-          return (a.category || '').localeCompare(b.category || '');
-        default:
-          return 0;
-      }
-    });
-  }
-
 }
