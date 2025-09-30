@@ -7,11 +7,14 @@ You can visit here - https://library-management-aqwp.onrender.com/
 
 - **Book Management**: Add, edit, delete, and view book details
 - **Search**: Real-time search by book title (case-insensitive)
-- **Modern UI**: Clean, intui
-<img width="937" height="842" alt="book list page" src="https://github.com/user-attachments/assets/96b9a40f-332b-4929-9e31-a458792113ec" />
+- **Modern UI**: Clean, intuitive
+<img width="937" height="842" alt="image" src="https://github.com/user-attachments/assets/41b61108-4b63-45ac-8d41-5c42c7a2a403" />
+<img width="937" height="842" alt="image" src="https://github.com/user-attachments/assets/bef58a8f-5061-4ac0-9fb1-b5c4bd277051" />
+
 
 - **Form Validation**: Comprehensive validation for all book fields
-<img width="937" height="842" alt="form page" src="https://github.com/user-attachments/assets/9f326884-70e7-4ffa-ad31-3595e2a3426e" />
+<img width="937" height="842" alt="image" src="https://github.com/user-attachments/assets/c048d03a-0d8e-40b0-8465-e18b2844eeb3" />
+
 
 
 - **Responsive Design**: Works on desktop and mobile devices
