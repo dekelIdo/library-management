@@ -1,15 +1,25 @@
 # Library Management System
 
 A simple Angular application for managing a personal book library with full CRUD operations, search functionality, and responsive design.
+You can visit here - https://library-management-aqwp.onrender.com/
 
 ## Features
 
 - **Book Management**: Add, edit, delete, and view book details
 - **Search**: Real-time search by book title (case-insensitive)
+- **Modern UI**: Clean, intui
+<img width="937" height="842" alt="book list page" src="https://github.com/user-attachments/assets/96b9a40f-332b-4929-9e31-a458792113ec" />
+
 - **Form Validation**: Comprehensive validation for all book fields
+<img width="937" height="842" alt="form page" src="https://github.com/user-attachments/assets/9f326884-70e7-4ffa-ad31-3595e2a3426e" />
+
+
 - **Responsive Design**: Works on desktop and mobile devices
+<img width="937" height="842" alt="responsive screens" src="https://github.com/user-attachments/assets/78f75fff-8342-40ea-925e-d929b3563674" />
+
+ 
 - **Data Persistence**: Changes are saved to localStorage
-- **Modern UI**: Clean, intuitive interface with modal dialogs
+tive interface with modal dialogs
 
 ## Installation & Running
 
