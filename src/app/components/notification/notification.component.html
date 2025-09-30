@@ -1,0 +1,20 @@
+<div class="notification-container">
+  <div 
+    *ngFor="let notification of notifications$ | async; trackBy: trackByNotificationId" 
+    [class]="getNotificationClass(notification.type)"
+    class="notification-item"
+  >
+    <div class="notification-content">
+      <span class="notification-icon">{{ getNotificationIcon(notification.type) }}</span>
+      <span class="notification-message">{{ notification.message }}</span>
+    </div>
+    <button 
+      class="notification-close" 
+      (click)="onClose(notification.id)"
+      type="button"
+      aria-label="Close notification"
+    >
+      ×
+    </button>
+  </div>
+</div>

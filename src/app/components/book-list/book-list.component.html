@@ -1,0 +1,231 @@
+<div class="book-list-container">
+  <!-- Notifications -->
+  <app-notification></app-notification>
+
+  <!-- Header -->
+  <mat-toolbar color="primary" class="header-toolbar">
+    <mat-toolbar-row>
+      <mat-icon class="header-icon">library_books</mat-icon>
+      <span class="header-title">Library Management</span>
+      <span class="spacer"></span>
+      <button 
+        mat-raised-button 
+        color="accent"
+        (click)="onAddBook()"
+        type="button"
+        class="add-button"
+      >
+        <mat-icon>add</mat-icon>
+        Add New Book
+      </button>
+    </mat-toolbar-row>
+  </mat-toolbar>
+
+  <!-- Search and Filter Bar -->
+  <div class="search-container">
+    <div class="search-controls">
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Search books...</mat-label>
+        <input 
+          matInput
+          (input)="onSearchChange($event)"
+          placeholder="Search by title, author, category, or status..."
+        />
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="sort-field">
+        <mat-label>Sort by</mat-label>
+        <mat-select (selectionChange)="onSortDropdownChange($event)" [value]="currentSort">
+          <mat-option value="title">Title A-Z</mat-option>
+          <mat-option value="title-desc">Title Z-A</mat-option>
+          <mat-option value="author">Author A-Z</mat-option>
+          <mat-option value="author-desc">Author Z-A</mat-option>
+          <mat-option value="year">Year (Oldest First)</mat-option>
+          <mat-option value="year-desc">Year (Newest First)</mat-option>
+          <mat-option value="category">Category</mat-option>
+          <mat-option value="status">Reading Status</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Filter by category</mat-label>
+        <mat-select (selectionChange)="onCategoryFilterChange($event)" [value]="currentCategoryFilter">
+          <mat-option value="">All Categories</mat-option>
+          <mat-option *ngFor="let category of availableCategories" [value]="category">
+            {{ category }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button 
+        mat-stroked-button 
+        color="warn" 
+        (click)="onResetFilters()"
+        class="reset-button"
+        type="button"
+        [disabled]="!hasActiveFilters()"
+      >
+        <mat-icon>refresh</mat-icon>
+        Reset Filters
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div *ngIf="loading$ | async" class="loading-container">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Loading books...</p>
+  </div>
+
+  <!-- Books Grid -->
+  <main class="books-grid" *ngIf="!(loading$ | async)">
+    <mat-card 
+      *ngFor="let book of paginatedBooks$ | async; trackBy: trackByBookId" 
+      class="book-card"
+    >
+      <img 
+        *ngIf="book.coverImage" 
+        mat-card-image 
+        [src]="book.coverImage" 
+        [alt]="book.title + ' cover'"
+        class="book-cover-image"
+      >
+      
+      <mat-card-header>
+        <mat-card-title class="book-title">{{ book.title }}</mat-card-title>
+        <mat-card-subtitle class="book-author">by {{ book.author }}</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+
+        <div class="book-meta">
+          <mat-chip-set *ngIf="book.year" class="book-year">
+            <mat-chip color="primary" selected>
+              <mat-icon matChipAvatar>calendar_today</mat-icon>
+              {{ book.year }}
+            </mat-chip>
+          </mat-chip-set>
+          
+          <mat-chip-set *ngIf="book.category" class="book-category">
+            <mat-chip [color]="getCategoryColor(book.category)" selected>
+              {{ book.category }}
+            </mat-chip>
+          </mat-chip-set>
+
+          <mat-chip-set *ngIf="book.status" class="book-status">
+            <mat-chip [color]="getStatusColor(book.status)" selected>
+              <mat-icon matChipAvatar>{{ getStatusIcon(book.status) }}</mat-icon>
+              {{ book.status }}
+            </mat-chip>
+          </mat-chip-set>
+        </div>
+
+        <p *ngIf="book.description" class="book-description">
+          {{ book.description | slice:0:150 }}{{ book.description.length > 150 ? '...' : '' }}
+        </p>
+      </mat-card-content>
+
+      <mat-card-actions align="end">
+        <button 
+          mat-button 
+          color="primary"
+          (click)="onViewBook(book)"
+          type="button"
+        >
+          <mat-icon>visibility</mat-icon>
+          View
+        </button>
+        <button 
+          mat-button 
+          color="accent"
+          (click)="onEditBook(book)"
+          type="button"
+        >
+          <mat-icon>edit</mat-icon>
+          Edit
+        </button>
+        <button 
+          mat-button 
+          color="warn"
+          (click)="onDeleteBook(book)"
+          type="button"
+        >
+          <mat-icon>delete</mat-icon>
+          Delete
+        </button>
+      </mat-card-actions>
+    </mat-card>
+
+    <!-- Empty State -->
+    <div *ngIf="(books$ | async)?.length === 0" class="empty-state">
+      <mat-icon class="empty-icon">library_books</mat-icon>
+      <h3>No books found</h3>
+      <p *ngIf="!hasActiveFilters()">Start by adding your first book to the library!</p>
+      <p *ngIf="hasActiveFilters()">No books found. Try resetting filters or adding new books.</p>
+      <div class="empty-state-actions">
+        <button 
+          *ngIf="hasActiveFilters()"
+          mat-stroked-button 
+          color="warn"
+          (click)="onResetFilters()"
+          type="button"
+          class="reset-filters-btn"
+        >
+          <mat-icon>refresh</mat-icon>
+          Reset Filters
+        </button>
+        <button 
+          mat-raised-button 
+          color="primary"
+          (click)="onAddBook()"
+          type="button"
+        >
+          <mat-icon>add</mat-icon>
+          Add Your First Book
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Pagination -->
+  <div class="pagination-container" *ngIf="totalBooks > 0 && !(loading$ | async)">
+    <mat-paginator
+      [length]="totalBooks"
+      [pageSize]="pageSize"
+      [pageIndex]="currentPage"
+      [pageSizeOptions]="pageSizeOptions"
+      [showFirstLastButtons]="true"
+      (page)="onPageChange($event)"
+      class="book-paginator">
+    </mat-paginator>
+    
+    <div class="pagination-info">
+      <span class="books-count">
+        Showing {{ (currentPage * pageSize) + 1 }} - {{ Math.min((currentPage + 1) * pageSize, totalBooks) }} of {{ totalBooks }} books
+      </span>
+    </div>
+  </div>
+
+  <!-- Book Form Modal -->
+  <div *ngIf="showAddForm" class="modal-overlay" (click)="onFormClose()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <app-book-form 
+        [book]="selectedBook"
+        (saved)="onBookSaved()"
+        (cancelled)="onFormClose()"
+      ></app-book-form>
+    </div>
+  </div>
+
+  <!-- Book Detail Modal -->
+  <div *ngIf="selectedBook && !showAddForm" class="modal-overlay" (click)="onFormClose()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <app-book-detail 
+        [book]="selectedBook"
+        (close)="onFormClose()"
+        (edit)="onEditBook(selectedBook)"
+      ></app-book-detail>
+    </div>
+  </div>
+</div>

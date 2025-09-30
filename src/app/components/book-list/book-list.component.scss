@@ -1,0 +1,402 @@
+.book-list-container {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+// Header styling
+.header-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.header-icon {
+  margin-right: 8px;
+}
+
+.header-title {
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.add-button {
+  margin-left: 16px;
+}
+
+// Search and filter container
+.search-container {
+  padding: 24px;
+  background-color: white;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.search-controls {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: 0 auto;
+  justify-content: center;
+  padding: 8px 0;
+}
+
+.search-field {
+  flex: 1;
+  min-width: 250px;
+  max-width: 400px;
+}
+
+.sort-field,
+.filter-field {
+  min-width: 150px;
+  max-width: 200px;
+}
+
+.reset-button {
+  min-width: 140px;
+  height: 56px; // Match form field height
+  align-self: center;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  
+  &:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+// Loading container
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+  color: #666;
+
+  p {
+    margin-top: 16px;
+    font-size: 16px;
+  }
+}
+
+// Books grid
+.books-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+  padding: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+  align-items: start;
+  
+  @media (min-width: 1200px) {
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  }
+  
+  @media (min-width: 1600px) {
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  }
+}
+
+.book-card {
+  transition: all 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  }
+
+  mat-card-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+  }
+
+  mat-card-actions {
+    margin-top: auto;
+    padding: 8px 16px 16px 16px;
+    gap: 8px;
+  }
+}
+
+.book-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+
+.book-author {
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 0;
+}
+
+.book-cover-image {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 8px 8px 0 0;
+  transition: transform 0.3s ease;
+  
+  &:hover {
+    transform: scale(1.02);
+  }
+}
+
+.book-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.book-year,
+.book-category,
+.book-status {
+  margin: 0;
+}
+
+.book-description {
+  color: #555;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  margin: 0;
+}
+
+// Pagination styles
+.pagination-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px;
+  background: white;
+  border-top: 1px solid #e0e0e0;
+  margin-top: 24px;
+}
+
+.book-paginator {
+  margin-bottom: 16px;
+}
+
+.pagination-info {
+  text-align: center;
+  color: #666;
+  font-size: 14px;
+}
+
+.books-count {
+  font-weight: 500;
+}
+
+// Empty state
+.empty-state {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+  color: #666;
+
+  .empty-icon {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    margin-bottom: 16px;
+    color: #ccc;
+  }
+
+  h3 {
+    margin: 0 0 8px 0;
+    font-size: 1.5rem;
+    color: #333;
+  }
+
+  p {
+    margin: 0 0 24px 0;
+    font-size: 1rem;
+  }
+
+  .empty-state-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .reset-filters-btn {
+    margin-right: 8px;
+  }
+}
+
+// Modal styling
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 8px;
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .books-grid {
+    grid-template-columns: 1fr;
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .search-container {
+    padding: 16px;
+  }
+
+  .search-controls {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+  }
+
+  .search-field,
+  .sort-field,
+  .filter-field {
+    width: 100%;
+    max-width: none;
+  }
+
+  .reset-button {
+    width: 100%;
+    margin-top: 16px;
+  }
+
+  .pagination-container {
+    padding: 16px;
+    margin-top: 16px;
+  }
+
+  .pagination-info {
+    font-size: 12px;
+  }
+
+  .header-title {
+    font-size: 1.25rem;
+  }
+
+  .add-button {
+    margin-left: 8px;
+    
+    .mat-button-wrapper {
+      display: none;
+    }
+  }
+
+  .modal-content {
+    max-width: 95vw;
+    margin: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .books-grid {
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .search-container {
+    padding: 12px;
+  }
+
+  .book-card {
+    mat-card-actions {
+      flex-direction: column;
+      gap: 8px;
+      
+      button {
+        width: 100%;
+      }
+    }
+  }
+}
+
+// Material Design overrides
+mat-card {
+  mat-card-header {
+    padding-bottom: 8px;
+  }
+
+  mat-card-content {
+    padding-top: 0;
+  }
+
+  mat-card-actions {
+    padding-top: 16px;
+    margin: 0;
+  }
+}
+
+mat-chip-set {
+  display: inline-block;
+  margin: 0;
+}
+
+mat-chip {
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+// Custom scrollbar for modal
+.modal-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modal-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}

@@ -1,0 +1,102 @@
+[
+  {
+    "id": "1",
+    "title": "To Kill a Mockingbird",
+    "author": "Harper Lee",
+    "year": "1960",
+    "isbn": "9780061120084",
+    "description": "A gripping, heart-wrenching, and wholly remarkable tale of coming-of-age in a South poisoned by virulent prejudice, it views a world of great beauty and savage inequities through the eyes of a young girl.",
+    "category": "Fiction",
+    "coverImage": "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f"
+  },
+  {
+    "id": "2",
+    "title": "A Brief History of Time",
+    "author": "Stephen Hawking",
+    "year": "1988",
+    "isbn": "9780553380163",
+    "description": "A landmark volume in science writing by one of the great minds of our time, exploring the universe and its mysteries.",
+    "category": "Science",
+    "coverImage": "https://images.unsplash.com/photo-1507842217343-583bb7270b66"
+  },
+  {
+    "id": "3",
+    "title": "The Great Gatsby",
+    "author": "F. Scott Fitzgerald",
+    "year": "1925",
+    "isbn": "9780743273565",
+    "description": "A classic American novel set in the Jazz Age, exploring themes of wealth, love, and the American Dream.",
+    "category": "Fiction",
+    "coverImage": "https://images.unsplash.com/photo-1512820790803-83ca734da794"
+  },
+  {
+    "id": "4",
+    "title": "Sapiens: A Brief History of Humankind",
+    "author": "Yuval Noah Harari",
+    "year": "2011",
+    "isbn": "9780062316097",
+    "description": "An exploration of how Homo sapiens came to dominate the world, examining the cognitive, agricultural, and scientific revolutions.",
+    "category": "History",
+    "coverImage": "https://images.unsplash.com/photo-1528207776546-365bb710ee93"
+  },
+  {
+    "id": "5",
+    "title": "Becoming",
+    "author": "Michelle Obama",
+    "year": "2018",
+    "isbn": "9781524763138",
+    "description": "An intimate memoir by the former First Lady, sharing her journey from childhood to the White House.",
+    "category": "Biography",
+    "coverImage": "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e"
+  },
+  {
+    "id": "6",
+    "title": "1984",
+    "author": "George Orwell",
+    "year": "1949",
+    "isbn": "9780451524935",
+    "description": "A dystopian social science fiction novel that explores totalitarianism and surveillance.",
+    "category": "Fiction",
+    "coverImage": "https://images.unsplash.com/photo-1522202176988-66273c2fd55f"
+  },
+  {
+    "id": "7",
+    "title": "Educated",
+    "author": "Tara Westover",
+    "year": "2018",
+    "isbn": "9780399590504",
+    "description": "A memoir about a woman who grows up in a survivalist Mormon family and eventually goes on to earn a PhD from Cambridge University.",
+    "category": "Biography",
+    "coverImage": "https://images.unsplash.com/photo-1544936207-580c90c2b6e7"
+  },
+  {
+    "id": "8",
+    "title": "The Immortal Life of Henrietta Lacks",
+    "author": "Rebecca Skloot",
+    "year": "2010",
+    "isbn": "9781400052189",
+    "description": "The story of how one woman's cells changed the world, and how her family struggled with the medical and scientific establishment.",
+    "category": "Science",
+    "coverImage": "https://images.unsplash.com/photo-1581091012184-5c1b1be4d4f9"
+  },
+  {
+    "id": "9",
+    "title": "The Diary of a Young Girl",
+    "author": "Anne Frank",
+    "year": "1947",
+    "isbn": "9780553577129",
+    "description": "The diary of a young Jewish girl hiding from the Nazis during World War II.",
+    "category": "Biography",
+    "coverImage": "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e"
+  },
+  {
+    "id": "10",
+    "title": "Thinking, Fast and Slow",
+    "author": "Daniel Kahneman",
+    "year": "2011",
+    "isbn": "9780374533557",
+    "description": "A groundbreaking tour of the mind and explains the two systems that drive the way we think and make choices.",
+    "category": "Science",
+    "coverImage": "https://images.unsplash.com/photo-1532012197267-da84d127e765"
+  }
+]

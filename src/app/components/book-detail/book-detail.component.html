@@ -1,0 +1,73 @@
+<div class="book-detail-container" *ngIf="book">
+  <div class="detail-header">
+    <h2>{{ book.title }}</h2>
+    <button 
+      class="close-button" 
+      (click)="onClose()"
+      type="button"
+      aria-label="Close detail view"
+    >
+      ×
+    </button>
+  </div>
+
+  <div class="detail-content">
+    <div class="book-info">
+      <div class="book-header" *ngIf="book.coverImage">
+        <div class="book-cover-large">
+          <img [src]="book.coverImage" [alt]="book.title + ' cover'" class="cover-image">
+        </div>
+      </div>
+
+      <div class="info-row">
+        <span class="info-label">Author:</span>
+        <span class="info-value">{{ book.author }}</span>
+      </div>
+
+      <div class="info-row" *ngIf="book.year">
+        <span class="info-label">Year:</span>
+        <span class="info-value">{{ book.year }}</span>
+      </div>
+
+      <div class="info-row" *ngIf="book.isbn">
+        <span class="info-label">ISBN:</span>
+        <span class="info-value">{{ book.isbn }}</span>
+      </div>
+
+      <div class="info-row" *ngIf="book.category">
+        <span class="info-label">Category:</span>
+        <span class="info-value">{{ book.category }}</span>
+      </div>
+
+      <div class="info-row" *ngIf="book.status">
+        <span class="info-label">Reading Status:</span>
+        <span class="info-value status-value">
+          <mat-icon class="status-icon">{{ getStatusIcon(book.status) }}</mat-icon>
+          {{ book.status }}
+        </span>
+      </div>
+
+      <div class="info-row" *ngIf="book.description">
+        <span class="info-label">Description:</span>
+        <div class="info-value description-text">{{ book.description }}</div>
+      </div>
+    </div>
+
+    <div class="detail-actions">
+      <button 
+        class="action-button edit-button" 
+        (click)="onEdit()"
+        type="button"
+      >
+        Edit Book
+      </button>
+      <button 
+        class="action-button close-button" 
+        (click)="onClose()"
+        type="button"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+</div>
