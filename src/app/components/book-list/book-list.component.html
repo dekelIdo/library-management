@@ -33,13 +33,9 @@
       <mat-form-field appearance="outline" class="sort-field">
         <mat-label>Sort by</mat-label>
         <mat-select (selectionChange)="onSortDropdownChange($event)" [value]="currentSort">
-          <mat-option value="title">Title A-Z</mat-option>
-          <mat-option value="title-desc">Title Z-A</mat-option>
-          <mat-option value="author">Author A-Z</mat-option>
-          <mat-option value="author-desc">Author Z-A</mat-option>
-          <mat-option value="year">Year (Oldest First)</mat-option>
-          <mat-option value="year-desc">Year (Newest First)</mat-option>
-          <mat-option value="category">Category</mat-option>
+          <mat-option *ngFor="let option of sortOptions" [value]="option.value">
+            {{ option.label }}
+          </mat-option>
         </mat-select>
       </mat-form-field>
 

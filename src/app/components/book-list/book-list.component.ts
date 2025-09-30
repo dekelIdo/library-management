@@ -62,6 +62,16 @@ export class BookListComponent implements OnInit {
   currentCategoryFilter = '';
   availableCategories: string[] = [];
   
+  sortOptions = [
+    { value: 'title', label: 'Title A-Z' },
+    { value: 'title-desc', label: 'Title Z-A' },
+    { value: 'author', label: 'Author A-Z' },
+    { value: 'author-desc', label: 'Author Z-A' },
+    { value: 'year', label: 'Year (Oldest First)' },
+    { value: 'year-desc', label: 'Year (Newest First)' },
+    { value: 'category', label: 'Category' }
+  ];
+  
   // Pagination properties
   pageSize = 6; // Default page size
   pageSizeOptions = [3, 6, 9, 12, 18];
